@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" href="static/favicon.ico" type="image/x-icon"/>
+    <!-- <link rel="stylesheet" href="static/bootstrap.min.css"> -->
+    <link rel="stylesheet" href="static/radar-chart.css">
+    <link rel="stylesheet" href="static/site.css">
+    <link rel="stylesheet" href="static/loader.css">    
+    <script src="static/utilities.js"></script>
+    <script src="static/angular.min.js"></script>
+    <script src="static/angularApp.js"></script>
+    <script src="static/d3.v3.min.js"></script>
+    <script src="static/d3-queue.v3.min.js"></script>
+    <script src="static/d3appHead.js"></script>
+    <script src="static/d3app.js"></script>
+    <script src="static/radar-chart.js"></script>
+
+
+    <title> MLB Players 1970-2017 </title>
+  </head>
+  <body id="body" ng-app="MainApp" ng-controller="MainController">
+
+    <!-- data loading spinner -->
+    <div class="loaderbox" id="loaderbox">
+      <div class="loader"></div>
+      <div class="center">Loading Data ...</div>
+    </div>
+
+
+
+    <div class="container">
+      <!-- player panel -->
+      <div id="top1" class="fixed-top">
+        <div class="row">
+          <!-- col 0  -->
+          <div class="leftmenu" style="width: 50px;">
+            <div id="guide2_toggle" class="leftmenu_icon"> 
+              <svg class="svgicon" xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8">
+                <path d="M2.47 0c-.85 0-1.48.26-1.88.66-.4.4-.54.9-.59 1.28l1 .13c.04-.25.12-.5.31-.69.19-.19.49-.38 1.16-.38.66 0 1.02.16 1.22.34.2.18.28.4.28.66 0 .83-.34 1.06-.84 1.5-.5.44-1.16 1.08-1.16 2.25v.25h1v-.25c0-.83.31-1.06.81-1.5.5-.44 1.19-1.08 1.19-2.25 0-.48-.17-1.02-.59-1.41-.43-.39-1.07-.59-1.91-.59zm-.5 7v1h1v-1h-1z"
+                transform="translate(2)" />
+              </svg>
+            </div>
+          </div>
+
+          <!-- col 1 stats header -->
+          <div class="statsbar_stats_header">
+            <div class="statsbar_stats_header_item" ng-repeat="stat in player1.statlist">
+              {{stat}}
+            </div>
+          </div>
+          <!-- col 2 the bars -->
+          <div id="statsbar1" class="statsbar"></div>
+
+          <!-- col 3 left headshot -->
+          <div class="headshot_div">
+            <img id="headshot1" ng-if="player1.mlbam" ng-src="http://mlb.mlb.com/mlb/images/players/head_shot/{{player1.mlbam}}.jpg"
+            onerror="this.src='static/noimage.png'">
+            <div>{{player1.playerName}} <span class='description'>{{description(player1)}}</span></div>
+          </div>
+
+          <!-- col 4 radar chart -->
+          <div id="radar_wrapper"></div>
+
+
+          <!-- col 5 headshot 2 -->
+          <div class="headshot_div">
+            <img id="headshot2" ng-if="player2.mlbam" ng-src="http://mlb.mlb.com/mlb/images/players/head_shot/{{player2.mlbam}}.jpg"
+            onerror="this.src='static/noimage.png'">
+            <div>{{player2.playerName}} <span class='description'>{{description(player2)}}</span></div>
+          </div>
+          <!-- col 6 stats header 2 -->
+          <div class="statsbar_stats_header">
+            <div class="statsbar_stats_header_item" ng-repeat="stat in player2.statlist">
+              {{stat}}
+            </div>
+          </div>
+          <!-- col 7 the bars 2 -->
+          <div id="statsbar2" class="statsbar"></div>
+
+        </div>
+
+        <!-- general header -->
+        <div class="overlay" id="bannerheader" style="top: 0; width: 100%; height: 150px; background-color: rgba(0,0,0,0.7); z-index:4; visibility: visible;">
+          <div class="overlay" style="top:35px; width: 100%; text-align: left; padding-left: 35px"> 
+            <span style="font-size: 36px; font-weight: bold;">MLB Players 1970 - 2017</span><br>
+            <span style="font-size: 14px;">A visualization of player statistics highlighting cost and production</span></div>
+        </div>
+
+        <!-- top panel guide -->
+        <div class="overlay" id="guide2" style="top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); z-index:4; visibility: hidden;">
+          <div class="overlay overlay_border" style="left: 30px; width: 565px; height: 100%">
+            <div class="overlay" style="top: 15px; width: 100%; padding: 0 10%;"><span class="overlay_text_big">Player view</span> <br><br>
+              The bars and scores represent the <mark>percentile</mark> the player is among all eligible players of the same type (Fielder/Starting Pitcher/Reliever). For example, a score of 90 means that the player is among the top 10% in MLB that season<br><br>
+              You can click on the bars in the other years to scroll forward or backward
+            </div>
+          </div>
+          <div class="overlay overlay_border" style="left: 600px; width: 145px; height: 100%">
+            <div class="overlay" style="top: 15px; width: 100%; padding: 0 10%;"><span class="overlay_text_big">Radar</span> <br><br>
+              Both players are shown here for comparison, but <mark>only</mark> if they are of the same type
+            </div>
+          </div>
+          <div class="overlay overlay_border" style="left: 750px; width: 565px; height: 100%">
+            <div class="overlay" style="top: 15px; width: 100%; padding: 0 10%;"><span class="overlay_text_big">Player2 view</span> <br><br>
+              The 2nd player you select appear here<br><br>
+              The system will let you alternate between selecting player1 and player2
+            </div>            
+          </div>
+        </div>
+
+      </div>
+
+      <div id="top_spacing" class="fixed-top"></div>
+      
+      <!-- menu div -->
+      <div id="top2" class="fixed-top">
+        <div class="row vcenter justify_between">
+          <!-- <div class="top2col"></div> -->
+          <div class="top2col">Sort Salary View (Left) By: </div>
+          <div class="select-style">
+            <select ng-model="sortBy1" ng-change="rePlot(1)">
+              <option ng-value="'Age'">Age</option>
+              <option ng-value="'Salary_norm'">Salary</option>
+              <option ng-value="'WAR'">WAR</option>
+            </select>
+          </div>
+          <div class="top2col">
+            Select Team: 
+          </div>
+          <div class="select-style">
+            <select id="teamSelect" ng-model="selectedTeam" ng-change="rePlot(0)">
+              <option ng-repeat="team in teams" ng-value="team"> {{getTeamName(team)}} </option>
+            </select>
+          </div>
+
+          <div class="top2col">
+            Sort WAR View (Bottom-right) By:
+          </div>
+          <div class="select-style">
+            <select ng-model="sortBy2" ng-change="rePlot(2)">
+              <option ng-value="'Age'">Age</option>
+              <option ng-value="'Salary_norm'">Salary</option>
+              <option ng-value="'WAR'">WAR</option>
+            </select>
+          </div>
+          <div class="top2col">  </div>
+
+          <div class="top2col"> Select Stat (Top-right): </div>
+          <div class="select-style">
+            <select ng-model="selectedStat" ng-change="rePlot(3)">
+              <option ng-repeat="stat in stats_raw" ng-value="stat"> {{stat}} </option>
+            </select>
+          </div>
+          <div class="top2col"></div>
+
+
+
+        </div>
+      </div>
+
+      <div id="top_spacing2" class="fixed-top"></div>
+
+      <div id="info" ng-if="player_hovered.team || teamPerformance.hovered" class="fixed-top">
+        <div class="row">
+          <div class="headshot_div headshot_div_hover">
+            <img id="headshot_hover" ng-if="player_hovered.mlbam" ng-src="http://mlb.mlb.com/mlb/images/players/head_shot/{{player_hovered.mlbam}}.jpg" onerror="this.src='static/noimage.png'">
+          </div>
+          <div class="info_text_container">
+            <div ng-if="player_hovered.mlbam">
+              <div>{{player_hovered.playerName + description(player_hovered)}}</div>
+              <div>Salary: ${{formatSalary(player_hovered.salary)}}</div>
+              <div class="bottom_border">WAR: {{player_hovered.WAR}}</div>
+            </div>
+            <div ng-if="!player_hovered.mlbam">
+              <div>&nbsp; </div>
+              <div>&nbsp; </div>
+              <div class="bottom_border">&nbsp;</div>
+            </div>
+
+            <div class="row justify_between">
+              <div id="team_text" ng-if="teamPerformance.hovered">
+                <div>{{teamPerformance.season}} {{getTeamName(player_hovered.team || selectedTeam)}}</div>
+                <div>{{teamPerformance.w}}W-{{teamPerformance.l}}L({{teamPerformance.wpct}})</div>
+                <div>{{teamPerformance.postSeasonText}}</div>
+              </div>
+              <div><img id="team_logo" ng-if="teamPerformance.hovered" ng-src="http://a.espncdn.com/combiner/i?img=/i/teamlogos/mlb/500/{{getESPNID(selectedTeam)}}.png&h=150&w=150"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="main row">
+
+        <div class="overlay" id="guide1" style="width: 1345px; height: 580px; background-color: rgba(0,0,0,0.7); z-index:1; visibility:visible;">
+          <div class="overlay overlay_border" id="overlay_left">
+            <div class="overlay overlay_text_center"><span class="overlay_text_big">Salary View</span> <br><br>Each bar segment represents a player. Bar height represents their salary (normalized by the average salary of the top 750 players in the league). See how much different players <mark>cost</mark>!<br><br>(Darker bars are pitchers)<br><br> <mark>Hover</mark> on or <mark>click</mark> the bar segments to see player details
+            </div>
+            <div class="overlay"  style="left: 220px; top: 0">
+              <div class="overlay arrow" style="top: 0px;">&#x25B4;</div>
+              <div class="overlay" style="left: -80px; top: 25px; width: 160px">You can change how the bars segments are <mark>ordered</mark> in the vertical direction</div>
+            </div> 
+
+            <div class="overlay"  style="left: 480px; top: 0">
+              <div class="overlay arrow" style="top: 0px;">&#x25B4;</div>
+              <div class="overlay" style="left: -80px; top: 25px; width: 160px">Select <mark>team</mark> here</div>
+            </div> 
+
+            <div class="overlay" style="top: 10px">
+              <div class="overlay" style="left: 25px; width: 80px"> When you want to bring back this <mark>guide</mark> </div>
+              <div class="overlay arrow" style="left: 5px;">&#x25C2;</div>
+            </div>  
+
+            <div class="overlay" style="top: 200px">
+              <div class="overlay" style="left: 25px; width: 120px"><mark>Scale</mark> and <mark>move</mark> the bar chart. You can zoom in to see the players with lower salaries </div>
+              <div class="overlay arrow" style="left: 5px;">&#x25C2;</div>
+            </div>  
+
+            <div class="overlay" style="top: 300px; right: 18px">
+              <div class="overlay arrow" style=""> &#x25B8; </div>
+              <div class="overlay " style="right: 5px; width: 120px"> See how much a bar segment is worth. Hover on a year in the Salary or WAR view to see <mark>yearly detail</mark> </div>
+            </div>  
+
+          </div>
+          <div class="overlay overlay_border" id="overlay_right_top" style="left:685px;">
+            <div class="overlay overlay_text_center"><span class="overlay_text_big">Statistics View</span><br><br>Only eligible players are shown (at least 50 plate appearance or 20 innings pitched). Only showing pitchers for pitching stats and fielders for batting stats</div>
+
+            <div class="overlay"  style="left: 120px; top: 0">
+              <div class="overlay arrow" style="top: 0px;">&#x25B4;</div>
+              <div class="overlay" style="left: -80px; top: 25px; width: 160px">You can change the vetical <mark>order</mark> in the WAR chart too</div>
+              <div class="overlay"  style="left: 450px; top: 0">
+                <div class="overlay arrow" style="top: 0px;">&#x25B4;</div>
+                <div class="overlay" style="left: -80px; top: 25px; width: 160px">Change the <mark>statistic</mark> to show here</div>
+              </div> 
+            </div> 
+          </div>
+          <div class="overlay overlay_border" id="overlay_right_bottom" style="top:155px; left:685px;">
+            <div class="overlay overlay_text_center"><span class="overlay_text_big">WAR View</span> <br><br> WAR (Win Above Replacement) is the most commonly used statistic to summerize a player's <mark>overall production</mark>. <br><br>You can see how the total WAR correlates well with the team's actual performance shown by the line chart </div>
+          </div>
+
+ 
+        </div>
+
+        <!-- <div id="mainspacing"></div> -->
+        <div class="leftmenu">
+
+          <div id="guide1_toggle" class="leftmenu_icon"> 
+            <svg class="svgicon" xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8">
+              <path d="M2.47 0c-.85 0-1.48.26-1.88.66-.4.4-.54.9-.59 1.28l1 .13c.04-.25.12-.5.31-.69.19-.19.49-.38 1.16-.38.66 0 1.02.16 1.22.34.2.18.28.4.28.66 0 .83-.34 1.06-.84 1.5-.5.44-1.16 1.08-1.16 2.25v.25h1v-.25c0-.83.31-1.06.81-1.5.5-.44 1.19-1.08 1.19-2.25 0-.48-.17-1.02-.59-1.41-.43-.39-1.07-.59-1.91-.59zm-.5 7v1h1v-1h-1z"
+              transform="translate(2)" />
+            </svg>
+          </div>
+          <div class="leftmenu_spacing20"></div>
+          <div class="leftmenu_spacing20"></div>
+          <div class="leftmenu_spacing20"></div>
+          <div ng-click="move(-1)" class="leftmenu_icon"> 
+            <svg class="svgicon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 8 8">
+              <path d="M4 0l-4 4 1.5 1.5 2.5-2.5 2.5 2.5 1.5-1.5-4-4z" transform="translate(0 1)" />
+            </svg>
+          </div>
+          <div ng-click="zoom(1)" class="leftmenu_icon"> 
+            <svg class="svgicon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 8 8">
+              <path d="M3.5 0c-1.93 0-3.5 1.57-3.5 3.5s1.57 3.5 3.5 3.5c.61 0 1.19-.16 1.69-.44a1 1 0 0 0 .09.13l1 1.03a1.02 1.02 0 1 0 1.44-1.44l-1.03-1a1 1 0 0 0-.13-.09c.27-.5.44-1.08.44-1.69 0-1.93-1.57-3.5-3.5-3.5zm0 1c1.39 0 2.5 1.11 2.5 2.5 0 .59-.2 1.14-.53 1.56-.01.01-.02.02-.03.03a1 1 0 0 0-.06.03 1 1 0 0 0-.25.28c-.44.37-1.01.59-1.63.59-1.39 0-2.5-1.11-2.5-2.5s1.11-2.5 2.5-2.5zm-.5 1v1h-1v1h1v1h1v-1h1v-1h-1v-1h-1z"
+              />
+            </svg>
+          </div>
+          <div ng-click="zoom(-1)" class="leftmenu_icon"> 
+            <svg class="svgicon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 8 8">
+              <path d="M3.5 0c-1.93 0-3.5 1.57-3.5 3.5s1.57 3.5 3.5 3.5c.61 0 1.19-.16 1.69-.44a1 1 0 0 0 .09.13l1 1.03a1.02 1.02 0 1 0 1.44-1.44l-1.03-1a1 1 0 0 0-.13-.09c.27-.5.44-1.08.44-1.69 0-1.93-1.57-3.5-3.5-3.5zm0 1c1.39 0 2.5 1.11 2.5 2.5 0 .59-.2 1.14-.53 1.56-.01.01-.02.02-.03.03a1 1 0 0 0-.06.03 1 1 0 0 0-.25.28c-.44.37-1.01.59-1.63.59-1.39 0-2.5-1.11-2.5-2.5s1.11-2.5 2.5-2.5zm-1.5 2v1h3v-1h-3z"
+              />
+            </svg>
+          </div>
+          <div ng-click="move(1)" class="leftmenu_icon"> 
+            <svg class="svgicon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 8 8">
+              <path d="M1.5 0l-1.5 1.5 4 4 4-4-1.5-1.5-2.5 2.5-2.5-2.5z" transform="translate(0 1)" />
+            </svg>
+          </div>
+        </div>
+
+        <div id="chartContainerLeft">
+          <div id="chartLeft"></div>
+          <div id="chartLeftYear"></div>
+        </div>
+        <div id="barlegend">
+          <div id="sal_legend_text"></div>
+          <div id="sal_legend"></div>
+          <div id="war_legend_text"></div>
+          <div id="war_legend"></div>
+        </div>
+        <div id="chartContainerRight">
+          <div id="chartRightTop"></div>
+          <div id="rightspacing"></div>
+          <div id="chartRightBottom"></div>
+          <div id="chartRightYear"></div>
+        </div>
+      </div>
+    </div>
+
+
+    <script> window.onload = function() {
+        
+
+        document.getElementById('guide1').onclick = function() { domops.off('guide1'); domops.off('bannerheader'); }
+        document.getElementById('bannerheader').onclick = function() { domops.off('guide1'); domops.off('bannerheader'); }
+        document.getElementById('guide1_toggle').onclick = function() { domops.on('guide1'); domops.on('bannerheader'); }
+        document.getElementById('guide2').onclick = function() { domops.off('guide2'); }
+        document.getElementById('guide2_toggle').onclick = function() { domops.on('guide2'); }
+
+        d3app.run();
+        // d3appHead.run() called in d3app.run()
+    }
+
+    </script>
+    <script>
+        var domops = {
+            on: function(id) {
+                document.getElementById(id).style.visibility = 'visible';
+            },
+            off: function(id) {
+                document.getElementById(id).style.visibility = 'hidden';
+            },
+        }
+    </script>
+  </body>
+</html>

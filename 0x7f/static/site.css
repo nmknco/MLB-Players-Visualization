@@ -1,0 +1,437 @@
+* {
+    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+mark {
+    padding: 1px 2px;  
+}
+
+svg {
+    background-color: #090909;
+}
+
+text:hover {
+    cursor: default;
+}
+
+body {
+    font: 12px arial, sans-serif;
+    color: #ffffff;
+    background-color: #0c0c0c;
+}
+
+div {
+    margin: 0;
+    padding: 0;
+}
+
+.row {
+    display: flex;
+}
+.vcenter {
+    align-items: center;
+    height: 100%;  
+}
+
+.container {
+    width: 1345px;
+}
+
+.fixed-top {
+    position: fixed;
+    width: 1345px;
+    left: 0px;
+    z-index: 3;
+}
+#top1 {
+    top: 0;
+    height: 150px;
+    background-color: #090909;
+    color: #ffffff;
+}
+
+.headshot_div {
+    flex: 0 0 105px;
+    padding: 15px 15px 0 0;
+    text-align: right;
+}
+
+.description {
+    font-size: 10px;
+}
+
+#headshot_hover,
+#headshot1,
+#headshot2 {
+    height: 90px;
+    border: 2px solid #aaaaaa;
+}
+
+
+#headshot1 {
+    border: 2px solid #c67400;
+}
+
+#headshot2 {
+    border: 2px solid #0075a8;
+}
+
+.area.player1 {
+    fill: #c67400;
+    stroke: #c67400;
+    stroke-width: 2px;
+
+}
+.area.player2 {
+    fill: #0075a8;
+    stroke: #0075a8;
+    stroke-width: 2px;
+}
+
+
+.statsbar_stats_header {
+    margin-top: 33px;
+    color: #cccccc;
+    font-weight: bold;
+    font-size: 11px;
+    text-align: right;
+    padding-right: 10px;
+}
+
+.statsbar_stats_header_item {
+    height: 20px;
+    align-items: center;
+}
+
+.bartext, .bartext_year {
+    fill: #ffffff;
+    font-weight: bold;
+}
+
+#top_spacing,
+#top_spacing2 {
+    top: 150px;
+    height: 1px;
+    background-color: #161616;
+}
+#top_spacing2 {
+    top: 181px;
+}
+
+#top2 {
+    top: 151px;
+    height: 30px;
+    background-color: #0a0a0a;
+    font-weight: bold;
+    padding-left: 10px;
+}
+
+
+.top2col {
+    padding: 0 5px 0 35px;
+}
+
+
+.justify_between {
+    justify-content: space-between;
+}
+
+.headshot_div_hover {
+    flex: 0 0 85px;
+}
+
+
+
+#info {
+    top: 210px;
+    left: 50px;
+    width: 300px;
+    height: 120px;
+    background-color: #060606;
+
+    box-shadow: 1px 1px 1px #000000;
+}
+
+.info_text_container {
+    width: 100%;
+    padding: 5px 5px 0 5px;
+}
+
+.bottom_border {
+    width: 100%;
+    padding-bottom: 2px;
+    border-bottom: 1px solid #666666;
+    margin-bottom: 7px;
+}
+
+#team_text {
+}
+
+
+#team_logo {
+    height: 60px;
+    /*border-radius: 25px;*/
+    /*border: 2px solid #aaaaaa;*/
+}
+
+
+.main {
+    margin-top: 182px;
+    width: 100%;
+    height: 580px;
+}
+
+#timeline {
+    overflow-x: auto;
+}
+
+.dot {
+    fill: #666666;
+}
+
+.selected1,
+.hovered1,
+.selected2,
+.hovered2,
+.dot_selected1,
+.dot_hovered1,
+.dot_selected2,
+.dot_hovered2 {
+    stroke-width: 2px;
+}
+
+.selected1,
+.hovered1 {
+    stroke: #c67400;
+}
+
+.selected2,
+.hovered2 {
+    stroke: #0075a8;
+}
+
+.dot_selected1,
+.dot_hovered1 {
+    fill: #c67400;
+    stroke: #c67400;
+}
+
+.dot_selected2,
+.dot_hovered2 {
+    fill: #0075a8;
+    stroke: #0075a8;
+}
+
+.yearText {
+    font-size: 10px;
+    font-weight: bold;
+    fill: #cccccc;
+    transform: rotate(-90deg) translate(1px,9px);
+}
+
+.chartline,
+.chartbaseline {
+    stroke:  #ffffff;
+    stroke-width: 2px;
+    fill: none;
+    opacity: 0.5;
+}
+
+.chartbaseline {
+    stroke-width: 2px;
+    stroke-dasharray: 4,2;
+    opacity: 0.3;
+}
+
+.main {
+    background-color: #0c0c0c;
+}
+
+
+
+#chartContainerLeft,
+#chartContainerRight {
+    width: 660px;
+    height: 550px;
+    /*background-color: #0c0c0c;*/
+}
+#overlay_left {
+    left: 30px;
+    width: 630px;
+    height: 550px; 
+}
+
+#chartLeft {
+    height: 550px; /*must specify height to avoid wierd things due to pixel rounding */
+}
+
+#overlay_right_top,
+#chartRightTop {
+    width: 660px;
+    height: 150px;
+}
+
+#rightspacing {
+    width: 100%;
+    height: 5px;
+}
+
+#overlay_right_bottom,
+#chartRightBottom {
+    width: 660px;
+    height: 395px;
+}
+
+#chartLeftYear,
+#chartRightYear {
+    height: 30px;
+}
+
+#barlegend {
+    width: 25px;
+}
+
+.overlay {
+    position: absolute;
+    color: #ffffff;
+    text-align: center;
+    cursor: pointer;
+}
+
+.overlay_text_center {
+    top: 25%;
+    width: 100%;
+    padding: 0 30%;
+}
+
+.overlay_text_big {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.overlay_border {
+    border: 2px solid #ffffff;
+}
+
+.arrow {
+    color: white;
+    font-size: 24px;
+}
+
+.axis line,
+.axis path {
+    stroke: #666666;
+    fill: none;
+    shape-rendering: crispEdges;
+}
+
+.axis text {
+    stroke: none;
+    fill: #aaaaaa;
+    shape-rendering: crispEdges;
+    font-family: sans-serif;
+    font-size: 9px;
+}
+
+
+.select-style {
+    border: 1px solid #ccc;
+    /*width: 120px;*/
+    height: 20px;
+    border-radius: 2px;
+    overflow: hidden;
+/*    background: #ffffff url("static/icons/icon-arrow-down.png") no-repeat right 90% 50%;*/
+}
+
+.select-style select {
+    padding: 1px 1px;
+    width: 100%;
+    min-width: 75px;
+    border: none;
+    box-shadow: none;
+    background: transparent;
+    background-color: #000000;
+    background-image: none;
+/*    -webkit-appearance: none;
+    -moz-appearance: none;*/
+    font-size: 12px;
+    color: #ffffff;
+}
+
+.select-style select:focus {
+    outline: none;
+}
+
+#teamSelect {
+    width: 180px;
+}
+
+.linelegend line {
+    stroke: #aaaaaa;
+    fill: none;
+    stroke-width: 1px;
+}
+
+.linelegend text {
+    stroke: none;
+    fill: #aaaaaa;
+    font-size: 11px;
+    opacity: 0.5;
+}
+
+#axisTextMain {
+    stroke: none;
+    fill: #cccccc;
+    font-size: 14px;
+}
+
+.leftmenu {
+    width: 30px;
+    padding: 5px;
+    background-color: #090909
+}
+
+.svgicon {
+    fill: #aaaaaa;
+    stroke: none;
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+}
+
+.leftmenu_spacing20 {
+    height: 20px;
+}
+
+.leftmenu_icon {
+    padding: 15px 0;
+}
+
+#barlegend svg {
+    background-color: #0c0c0c;
+}
+#barlegend svg text {
+    fill: #aaaaaa;
+    stroke: none;
+}
+
+#sal_legend_text {
+    margin-top: 20px;
+}
+
+#war_legend_text {
+    margin-top: 20px;
+}
+
+#sal_legend_svg_text {
+    transform: rotate(-90deg) translate(-345px,16px);
+}
+
+#war_legend_svg_text {
+    transform: rotate(-90deg) translate(-65px,16px);
+}
+
