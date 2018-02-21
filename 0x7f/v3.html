@@ -24,7 +24,7 @@
     <!-- data loading spinner -->
     <div class="loaderbox" id="loaderbox">
       <div class="loader"></div>
-      <div class="center">Loading Data ...</div>
+      <div class="center" id="loader_text">Loading Data ...</div>
     </div>
 
 
@@ -298,7 +298,14 @@
 
 
     <script> window.onload = function() {
-        
+        var domops = {
+            on: function(id) {
+                document.getElementById(id).style.visibility = 'visible';
+            },
+            off: function(id) {
+                document.getElementById(id).style.visibility = 'hidden';
+            },
+        }
 
         document.getElementById('guide1').onclick = function() { domops.off('guide1'); domops.off('bannerheader'); }
         document.getElementById('bannerheader').onclick = function() { domops.off('guide1'); domops.off('bannerheader'); }
@@ -311,15 +318,6 @@
     }
 
     </script>
-    <script>
-        var domops = {
-            on: function(id) {
-                document.getElementById(id).style.visibility = 'visible';
-            },
-            off: function(id) {
-                document.getElementById(id).style.visibility = 'hidden';
-            },
-        }
-    </script>
+
   </body>
 </html>

@@ -794,14 +794,22 @@ var d3app = {
         this.chartInit(); // whatever that does not need the data
 
         d3.queue()
-            .defer(d3.json, 'data/playerdata70_new_nested.json')
+            .defer(d3.csv, 'data/playerdata_final.csv')
             .defer(d3.json, 'data/Teams_nested.json')
             .defer(d3.json, 'data/Teams_nested_year.json')
             .defer(d3.json, 'data/team_stats_range.json')
             .defer(d3.json, 'data/salaries.json')
             .await(function(err, data1, data2, data3, data4, data5) {
 
-                d3app.data = data1;
+                document.getElementById('loader_text').textContent = 'Initializing ...';
+
+                // seems ok without coverting str value to number but we'll be safe here
+                utilities.formatRawDataFromCSV(data1);
+
+                console.log(data1);
+
+                d3app.data = utilities.nestPlayerDataByTeamYear(data1);
+                // console.log(d3app.data);
                 d3app.teamdata = data2;
                 d3app.teamdata_year = data3;
                 d3app.teamstatsrange = data4;
@@ -816,12 +824,9 @@ var d3app = {
 
                 d3app.plotBarLegend();
 
-                d3appHead.run();
+                d3appHead.run(utilities.nestPlayerDataByPlayerYear(data1));
+                // laoding spinner is removed when d3appHead.run() finishes
 
-                // remove laoding spinner
-                // could also wait for d3appHead.run() to finish
-                var lb = document.getElementById('loaderbox');
-                lb.parentNode.removeChild(lb);
             });
     },
 

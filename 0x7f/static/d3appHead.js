@@ -25,20 +25,11 @@ var d3appHead = {
         barbgcolor: '#111111',
     },
 
-    run: function() {
+    run: function(data) {
 
         var c = d3appHead.config;
 
-        // load the player-nested data
-        d3.queue()
-            .defer(d3.json, 'data/playerdata70_new_nested_by_player.json')
-            .await(function(err, data1) {
-                // console.log(data1);
-                d3appHead.data = data1;
-                // console.log('player-nested data loaded');
-                // d3appHead.plot('walkene01', 2012)
-            });
-
+        d3appHead.data = data;
 
         // setting up bar charts
         d3appHead.canvas1 = d3.select('#statsbar1').append('svg')
@@ -103,6 +94,9 @@ var d3appHead = {
             .append('g')
             .attr('transform', 'translate(20,10)');
 
+
+        var lb = document.getElementById('loaderbox');
+        lb.parentNode.removeChild(lb);
     },
 
     plotbars: function(key_bbref, curryear, activeWindow) {
